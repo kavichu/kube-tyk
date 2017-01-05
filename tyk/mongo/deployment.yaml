@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: tyk-mongo
+  name: tyk-mongo
+  namespace: kube-tyk
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tyk-mongo
+      name: tyk-mongo
+    spec:
+      containers:
+        - name: tyk-mongo
+          image: mongo:3.3
+          ports:
+          - name: mongo
+            containerPort: 27017
+            hostPort: 27017
+          securityContext:
+            privileged: true
+            seLinuxOptions:
+              level: "s0:c123,c456"
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-persistent-storage
+          gcePersistentDisk:
+            pdName: gke-tyk-mongo
+            fsType: ext4

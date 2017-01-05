@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tyk-pump
+  namespace: kube-tyk
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tyk-pump
+    spec:
+      containers:
+      - image: tykio/tyk-pump-docker-pub:latest
+        imagePullPolicy: Always
+        name: tyk-pump
